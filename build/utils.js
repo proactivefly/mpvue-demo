@@ -31,7 +31,7 @@ exports.cssLoaders = function (options) {
     loader: 'px2rpx-loader',
     options: {
       baseDpr: 1,
-      rpxUnit: 0.5
+      rpxUnit: 1 //设置设计图转换尺寸，defalut为0.5需要除以2，为了不除2 设置为1
     }
   }
 
