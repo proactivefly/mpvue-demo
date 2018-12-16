@@ -38,15 +38,25 @@
             <p class='leve_info'>留下您的信息</p>
             <p class='service'>专业销售顾问将为您提供一对一专业咨询服务</p>
             <div class="input_container">
-              <input type="text" class='input' placeholder="您的姓名" v-model='uname' ref='uname'>
-              <input type="number" class='input' placeholder="您的电话" oninput="if(value.length>11){value=value.slice(0,11)}" min='0' v-model='unumber' ref='unumber'>
-              <div class="index_select">
-                <cube-select 
-                  v-model="cityCode" 
-                  :options="cityList"
-                  :placeholder="defaultplaceholder"
-                ></cube-select>
-              </div>
+              <input type="text" class='input' placeholder="您的姓名" v-model='uname' placeholder-style="color:#F5A623">
+              <input type="number" 
+                class='input' 
+                placeholder="您的电话"
+                placeholder-style="color:#F5A623"
+                maxlength='11'
+                v-model='unumber'
+              >
+              <picker 
+                @change="cityChange"
+                :value="cityCode" 
+                :range="cityList" 
+                mode="selector"
+                range-key="name"
+              >
+                <view class="picker">
+                  <input type="text" class='input' placeholder="请选择地址" v-model='cityName' disabled='false'>
+                </view>
+              </picker>
             </div>
             <div class='address'>
               <div class='label'>门店地址：</div>
@@ -79,8 +89,9 @@
           {icon:fa_icon,desc:'方案灵活',text1:'租售随心',text2:'可退可过户',flag:'fa_icon'}
         ],
         telReg :/^1\d{10}$/,
-        cityList: [{value:0,text:'三亚'}],
+        cityList: [{id:0,name:'三亚'},{id:1,name:'北京'}],
         cityCode:0,
+        cityName:'三亚',
         defaultplaceholder:'请选择城市',
         uname:'',
         unumber:'',
@@ -90,32 +101,34 @@
       submit(){
         if(!this.uname){
           wx.showToast({
-            title: '请输入您的',
-            icon: 'error',
+            title: '请输入您的姓名',
+            icon: 'none',
             duration: 2000
           })
-          this.$refs.uname.focus()
           return
         }
         if(!this.unumber){
           wx.showToast({
             title: '请输入手机号',
-            icon: 'error',
+            icon: 'none',
             duration: 2000
           })
-          this.$refs.unumber.focus()
           return
         }
         if(!this.telReg.test(this.unumber)){
           wx.showToast({
             title: '手机号格式有误',
-            icon: 'error',
+            icon: 'none',
             duration: 2000
           })
-          this.$refs.unumber.focus()
           return
         }
-        this.$router.push('/nsd')
+        wx.navigateTo({url:'../detail/main'})
+      },
+      cityChange(e) {
+        var _idx=e.mp.detail.value
+        this.cityCode=_idx
+        this.cityName=this.cityList[_idx].name
       }
     }
   }
