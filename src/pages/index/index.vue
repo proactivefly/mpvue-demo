@@ -19,7 +19,7 @@
           <div class="line"></div>
         </div>
         <!-- 汽车 -->
-        <div class="car_wrapper">
+        <div class="car_wrapper" @click='godetail'>
           <img src="../../../static/img/newsale/pic_ec180@2x.png" alt="" class='car_img'>
           <div class="car_desc">
             <div class='row1'>
@@ -28,7 +28,7 @@
             </div>
             <div class='row2'>
               <span class='dur_desc'>北汽新能源/5座/续航180公里</span>
-              <span class='money_pay'>月供2300元</span>
+              <span class='money_pay'>月供1899元</span>
             </div>
           </div>
         </div>
@@ -38,18 +38,17 @@
             <p class='leve_info'>留下您的信息</p>
             <p class='service'>专业销售顾问将为您提供一对一专业咨询服务</p>
             <div class="input_container">
-              <input type="text" class='input' placeholder="您的姓名" v-model='uname' placeholder-style="color:#F5A623">
+              <input type="text" class='input' placeholder="您的姓名" v-model='uname' placeholder-class="placeholder-class"/>
               <input type="number" 
                 class='input' 
                 placeholder="您的电话"
-                placeholder-style="color:#F5A623"
+                placeholder-class="placeholder-class"
                 maxlength='11'
-                v-model='unumber'
-                adjust-position='true'
+                v-model='umobile'
               >
               <picker 
                 @change="cityChange"
-                :value="cityCode" 
+                :value="citycode" 
                 :range="cityList" 
                 mode="selector"
                 range-key="name"
@@ -61,7 +60,7 @@
             </div>
             <div class='address'>
               <div class='label'>门店地址：</div>
-              <div class='text'>三亚市吉阳区迎宾路龙坡村汽车城 联合电动汽车超巿(三亚店)</div>
+              <div class='text'>{{shopAddr}}</div>
             </div>
           </div>
           <div class="btn" @click='submit'>提交</div>
@@ -83,54 +82,65 @@
       return {
         list:[
           {icon:sf_icon,desc:'0首付',text1:'首付0元',text2:'买车无负担',flag:'sf_icon'},
-          {icon:rj_icon,desc:'日均75元',text1:'超低月供',text2:'还款无压力',flag:'rj_icon'},
+          {icon:rj_icon,desc:'日均60元',text1:'超低月供',text2:'还款无压力',flag:'rj_icon'},
           {icon:js_icon,desc:'极速提车',text1:'免上牌手续',text2:'5分钟提新车',flag:'js_icon'},
           {icon:yc_icon,desc:'用车无忧',text1:'本地牌照',text2:'用车超省心',flag:'yc_icon'},
           {icon:wb_icon,desc:'维保省心',text1:'3年免费保险',text2:'3年免费保养',flag:'wb_icon'},
           {icon:fa_icon,desc:'方案灵活',text1:'租售随心',text2:'可退可过户',flag:'fa_icon'}
         ],
         telReg :/^1\d{10}$/,
-        cityList: [{id:0,name:'三亚'}],
-        cityCode:0,
-        cityName:'三亚',
+        cityList: [{id:460200,name:'三亚市'}],
+        citycode:460200,
+        media:'mp',//来源 app|h5|mp
+        cityName:'三亚市',
+        shopAddr:'三亚市吉阳区迎宾路龙坡村汽车城 联合电动汽车超巿(三亚店)',
         defaultplaceholder:'请选择城市',
         uname:'',
-        unumber:'',
+        umobile:'',
       }
     },
     methods:{
       submit(){
         if(!this.uname){
-          wx.showToast({
-            title: '请输入您的姓名',
-            icon: 'none',
-            duration: 2000
-          })
+          wx.showToast({title: '请填写您的姓名',icon: 'none',duration: 2000})
           return
         }
-        if(!this.unumber){
-          wx.showToast({
-            title: '请输入手机号',
-            icon: 'none',
-            duration: 2000
-          })
+        if(this.uname.length>6){
+          wx.showToast({title: '请输入中英文字符，上限为6个字符',icon: 'none',duration: 2000})
+        }
+        if(!this.umobile){
+          wx.showToast({title: '请填写您的电话',icon: 'none',duration: 2000})
           return
         }
-        if(!this.telReg.test(this.unumber)){
-          wx.showToast({
-            title: '手机号格式有误',
-            icon: 'none',
-            duration: 2000
-          })
+        if(!this.telReg.test(this.umobile)){
+          wx.showToast({title: '请输入数字,上限为11位',icon: 'none',duration: 2000})
           return
         }
-        wx.navigateTo({url:'../detail/main'})
+        /*wx.request({
+          url:'/',
+          data:'',
+          method:'POST',
+          success:function(){},
+          fail:function(){}
+        })*/
       },
       cityChange(e) {
         var _idx=e.mp.detail.value
-        this.cityCode=_idx
+        this.citycode=_idx
         this.cityName=this.cityList[_idx].name
+      },
+      godetail(){
+        wx.navigateTo({url:'../detail/main'})
       }
+    },
+    onShareAppMessage(res) {
+      return {
+        title: '轻享易贷',
+        path: '../index/main',
+        // imageUrl:''
+      }
+    },
+    created(){
     }
   }
 </script>
@@ -262,6 +272,8 @@
                 display:block
                 color:#F5A623
                 outline:none
+                font-family:PingFangSC-Regular
+                font-weight:400
                 font-size:28px;/*px*/
                 letter-spacing:2px
                 width:100%
@@ -294,6 +306,8 @@
 <style>
   .input-placeholder{
     color:#F5A623;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
     font-size:28px;/*px*/
     letter-spacing:2px
   }

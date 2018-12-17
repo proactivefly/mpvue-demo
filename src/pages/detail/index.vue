@@ -84,11 +84,11 @@
             <p class='leve_info'>留下您的信息</p>
             <p class='service'>专业销售顾问将为您提供一对一专业咨询服务</p>
             <div class="input_container">
-              <input type="text" class='input' placeholder="您的姓名" v-model='uname'>
-              <input type="number" class='input' placeholder="您的电话" v-model='unumber' maxlength='11'>
+              <input type="text" class='input' placeholder="您的姓名" v-model='uname' maxlength='6'>
+              <input type="number" class='input' placeholder="您的电话" v-model='umobile' maxlength='11'>
                <picker 
                   @change="cityChange"
-                  :value="cityCode" 
+                  :value="citycode" 
                   :range="cityList" 
                   mode="selector"
                   range-key="name"
@@ -100,7 +100,7 @@
             </div>
             <div class='address'>
               <div class='label'>门店地址：</div>
-              <div class='text'>三亚市吉阳区迎宾路龙坡村汽车城 联合电动汽车超巿(三亚店)</div>
+              <div class='text'>{{shopAddr}}</div>
             </div>
           </div>
           <div class="btn_group">
@@ -117,6 +117,7 @@
     name:"newsaledetail",
     data(){
       return {
+        telReg :/^1\d{10}$/,
         contentList:[
           {title:'车身结构',text:'4门5座小型SUV'},
           {title:'长*宽*高（mm）',text:'3675*1630*1518'},
@@ -137,12 +138,13 @@
           {title:'充电宝',text:'●'},
         ],
         defaultplaceholder:'请选择城市',
-        cityList: [{id:0,name:'三亚'}],
-        cityCode:0,
-        cityName:'三亚',
+        cityList: [{id:460200,name:'三亚市'}],
+        citycode:460200,
+        cityName:'三亚市',
+        shopAddr:'三亚市吉阳区迎宾路龙坡村汽车城 联合电动汽车超巿(三亚店)',
         defaultplaceholder:'请选择城市',
         uname:'',
-        unumber:'',
+        umobile:'',
         modalShow:false,
       }
     },
@@ -152,38 +154,43 @@
       },
       submit(){
         if(!this.uname){
-          wx.showToast({
-            title: '请输入您的姓名',
-            icon: 'none',
-            duration: 2000
-          })
+          wx.showToast({title: '请填写您的姓名',icon: 'none',duration: 2000})
           return
         }
-        if(!this.unumber){
-          wx.showToast({
-            title: '请输入手机号',
-            icon: 'none',
-            duration: 2000
-          })
+        if(this.uname.length>6){
+          wx.showToast({title: '请输入中英文字符，上限为6个字符',icon: 'none',duration: 2000})
+        }
+        if(!this.umobile){
+          wx.showToast({title: '请填写您的电话',icon: 'none',duration: 2000})
           return
         }
-        if(!this.telReg.test(this.unumber)){
-           wx.showToast({
-            title: '手机号格式有误',
-            icon: 'none',
-            duration: 2000
-          })
+        if(!this.telReg.test(this.umobile)){
+          wx.showToast({title: '请输入数字,上限为11位',icon: 'none',duration: 2000})
           return
         }
+        /*wx.request({
+          url:'/',
+          data:'',
+          method:'POST',
+          success:function(){},
+          fail:function(){}
+        })*/
       },
       cityChange(e) {
         var _idx=e.mp.detail.value
-        this.cityCode=_idx
+        this.citycode=_idx
         this.cityName=this.cityList[_idx].name
       },
       cancel(){
         this.modalShow=false
       },
+    },
+    onShareAppMessage(res) { //转发信息
+      return {
+        title: 'ec180详情',
+        path: '../detail/main',
+        // imageUrl:''
+      }
     },
     created(){
     },
