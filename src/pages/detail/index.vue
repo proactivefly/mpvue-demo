@@ -75,43 +75,41 @@
       </div>
     </div>
     <div class="submit_btn" @click='showDialog'>申请购车</div>
-    <transition name="fade">
-      <div class="modal" v-show='modalShow'>
-        <div class="mask"></div>
-        <div class="modal_container">
-          <!-- 用户信息 -->
-          <div class="form_contaier">
-            <div class="form">
-              <p class='leve_info'>留下您的信息</p>
-              <p class='service'>专业销售顾问将为您提供一对一专业咨询服务</p>
-              <div class="input_container">
-                <input type="text" class='input' placeholder="您的姓名" v-model='uname' ref='uname'>
-                <input type="number" class='input' placeholder="您的电话" oninput="if(value.length>11){value=value.slice(0,11)}" min='0' v-model='unumber' ref='unumber'>
-                 <picker 
-                    @change="cityChange"
-                    :value="cityCode" 
-                    :range="cityList" 
-                    mode="selector"
-                    range-key="name"
-                  >
-                  <view class="picker">
-                    <input type="text" class='input' placeholder="请选择地址" v-model='cityName' disabled='false'>
-                  </view>
-                </picker>
-              </div>
-              <div class='address'>
-                <div class='label'>门店地址：</div>
-                <div class='text'>三亚市吉阳区迎宾路龙坡村汽车城 联合电动汽车超巿(三亚店)</div>
-              </div>
+    <div class="modal" v-show='modalShow'  catchtouchmove="ture">
+      <div class="mask"></div>
+      <div class="modal_container">
+        <!-- 用户信息 -->
+        <div class="form_contaier">
+          <div class="form">
+            <p class='leve_info'>留下您的信息</p>
+            <p class='service'>专业销售顾问将为您提供一对一专业咨询服务</p>
+            <div class="input_container">
+              <input type="text" class='input' placeholder="您的姓名" v-model='uname'>
+              <input type="number" class='input' placeholder="您的电话" v-model='unumber' maxlength='11'>
+               <picker 
+                  @change="cityChange"
+                  :value="cityCode" 
+                  :range="cityList" 
+                  mode="selector"
+                  range-key="name"
+                >
+                <view class="picker">
+                  <input type="text" class='input' placeholder="请选择地址" v-model='cityName' disabled='false'>
+                </view>
+              </picker>
             </div>
-            <div class="btn_group">
-              <div class="cancel btn" @click='cancel'>取消</div>
-              <div class="sure btn" @click='submit'>确定</div>
+            <div class='address'>
+              <div class='label'>门店地址：</div>
+              <div class='text'>三亚市吉阳区迎宾路龙坡村汽车城 联合电动汽车超巿(三亚店)</div>
             </div>
+          </div>
+          <div class="btn_group">
+            <div class="cancel btn" @click='cancel'>取消</div>
+            <div class="sure btn" @click='submit'>确定</div>
           </div>
         </div>
       </div>
-    </transition>
+    </div>
   </div>
 </template>
 <script>
@@ -139,7 +137,7 @@
           {title:'充电宝',text:'●'},
         ],
         defaultplaceholder:'请选择城市',
-        cityList: [{id:0,name:'三亚'},{id:1,name:'北京'}],
+        cityList: [{id:0,name:'三亚'}],
         cityCode:0,
         cityName:'三亚',
         defaultplaceholder:'请选择城市',
@@ -343,10 +341,6 @@
       font-family:PingFangSC-Medium
       background:linear-gradient(296deg,rgba(253,120,80,1) 0%,rgba(247,82,92,1) 100%);
     .modal
-      &.fade-enter-active,&.fade-leave-active
-        transition: opacity .5s
-      &.fade-enter,&.fade-leave-to
-        opacity: 0
       .mask
         position:absolute
         background:rgba(84,94,113,.2)
@@ -422,4 +416,11 @@
               &.sure
                 color:#fff
                 background:linear-gradient(296deg,rgba(253,120,80,1) 0%,rgba(247,82,92,1) 100%);
+</style>
+<style>
+  .input-placeholder{
+    color:#646464;
+    font-size:28px;/*px*/
+    letter-spacing:2px
+  }
 </style>

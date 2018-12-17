@@ -45,6 +45,7 @@
                 placeholder-style="color:#F5A623"
                 maxlength='11'
                 v-model='unumber'
+                adjust-position='true'
               >
               <picker 
                 @change="cityChange"
@@ -89,7 +90,7 @@
           {icon:fa_icon,desc:'方案灵活',text1:'租售随心',text2:'可退可过户',flag:'fa_icon'}
         ],
         telReg :/^1\d{10}$/,
-        cityList: [{id:0,name:'三亚'},{id:1,name:'北京'}],
+        cityList: [{id:0,name:'三亚'}],
         cityCode:0,
         cityName:'三亚',
         defaultplaceholder:'请选择城市',
@@ -289,4 +290,11 @@
             border-bottom-right-radius:10px
             background:linear-gradient(296deg,rgba(253,120,80,1) 0%,rgba(247,82,92,1) 100%);
             cursor:pointer
+</style>
+<style>
+  .input-placeholder{
+    color:#F5A623;
+    font-size:28px;/*px*/
+    letter-spacing:2px
+  }
 </style>
