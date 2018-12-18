@@ -54,7 +54,7 @@
                 range-key="name"
               >
                 <view class="picker">
-                  <input type="text" class='input' placeholder="请选择地址" v-model='cityName' disabled='false'>
+                  <input type="text" class='input' placeholder="请选择地址" v-model='cityname' disabled='false'>
                 </view>
               </picker>
             </div>
@@ -76,6 +76,7 @@
   import yc_icon from '../../../static/img/newsale/icon_wy@2x.png'
   import wb_icon from '../../../static/img/newsale/icon_wb@2x.png'
   import fa_icon from '../../../static/img/newsale/icon_fa@2x.png'
+  import request from '@/utils/request'
   export default{
     name:'newsale',
     data(){
@@ -91,8 +92,8 @@
         telReg :/^1\d{10}$/,
         cityList: [{id:460200,name:'三亚市'}],
         citycode:460200,
-        media:'mp',//来源 app|h5|mp
-        cityName:'三亚市',
+        channel:'小程序',
+        cityname:'三亚市',
         shopAddr:'三亚市吉阳区迎宾路龙坡村汽车城 联合电动汽车超巿(三亚店)',
         defaultplaceholder:'请选择城市',
         uname:'',
@@ -116,13 +117,21 @@
           wx.showToast({title: '请输入数字,上限为11位',icon: 'none',duration: 2000})
           return
         }
-        /*wx.request({
-          url:'/',
-          data:'',
-          method:'POST',
-          success:function(){},
-          fail:function(){}
-        })*/
+        var _params={
+          citycode:this.citycode,
+          cityname:this.cityname,
+          shopAddr:this.shopAddr,
+          uname:this.uname,
+          umobile:this.umobile,
+          media:this.channel,
+        }
+        request('/newDistribution/regist',_params).then((res)=>{
+          if(res.resultCode==0){
+              wx.showToast({title: '您已申请成功',duration: 2000})
+            }else{
+              wx.showToast({title:res.resultMsg,icon:'none',duration: 2000})
+            }
+        })
       },
       cityChange(e) {
         var _idx=e.mp.detail.value
